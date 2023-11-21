@@ -88,6 +88,8 @@ def get_forward_pe_from_website(ticker):
         # Send a GET request to the URL
         response = requests.get(url, headers=headers, timeout=5)
 
+        st.write("Response status code: ", response)
+
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
             # Parse the HTML content using BeautifulSoup
