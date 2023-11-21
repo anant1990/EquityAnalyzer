@@ -97,6 +97,7 @@ def get_forward_pe_from_website(ticker):
 
             # Locate the element containing the forward P/E ratio
             forward_pe_element = soup.find('div', {'class': 'Fl(start) smartphone_W(100%) W(50%)'}).find_all('td', {'class':'Fw(500) Ta(end) Pstart(10px) Miw(60px)'})[3].text
+            st.write("Forward P/E data")
             st.write(forward_pe_element)
 
             # Extract the forward P/E ratio
