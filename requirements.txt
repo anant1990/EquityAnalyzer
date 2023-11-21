@@ -1,6 +1,0 @@
-streamlit
-datetime
-requests
-pandas
-yfinance
-BeautifulSoup
