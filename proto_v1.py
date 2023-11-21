@@ -1,5 +1,4 @@
 import streamlit as st
-import hydralit_components as hc
 import datetime as dt
 import pandas as pd
 from PIL import Image
@@ -197,12 +196,12 @@ st.write(stock_df)
 stock_dcf = calculate_dcf(ticker, growth_rate)
 
 # Display DCF value to the user.
-display_dcf(stock_dcf)
+# display_dcf(stock_dcf)
 
 ttm_eps = get_epsttm_from_website(ticker)
 eps_val = eps_valuation(ticker, ttm_eps, growth_rate, growth_decline_rate)
 
-st.write("EPS value obtained with inputs is:", eps_val)
+# st.write("EPS value obtained with inputs is:", eps_val)
 st.divider()
 col1, col2 = st.columns(2)
 
