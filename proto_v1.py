@@ -62,7 +62,7 @@ def calculate_dcf(ticker, growth_rate):
 
 def eps_valuation(ticker, ttm_eps, growth_rate, growth_decline_rate):
 
-    final_eps_val = 0
+    final_eps_val = 0.00
     final_eps_val = ttm_eps * (1 + growth_rate)
     for year in range(1,5):
         final_eps_val = final_eps_val * (1 + (growth_rate * ((1 - growth_decline_rate)**(year-1))))
