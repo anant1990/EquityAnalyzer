@@ -3,5 +3,4 @@ datetime
 requests
 pandas
 yfinance
-numpy_financial
 BeautifulSoup
