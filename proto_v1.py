@@ -69,6 +69,8 @@ def eps_valuation(ticker, ttm_eps, growth_rate, growth_decline_rate):
         #st.write("EPS in Y", year+1, ":", final_eps_val)
     
     # st.write(yf.Ticker(ticker).info)
+    st.write("Get Forward P/E")
+    st.write(get_forward_pe_from_website(ticker))
 
     #Projected Value
     final_eps_val = final_eps_val * (get_forward_pe_from_website(ticker))
