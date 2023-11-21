@@ -2,7 +2,6 @@ import streamlit as st
 import datetime as dt
 import pandas as pd
 from PIL import Image
-import yahoo_fin.stock_info as si
 import yfinance as yf
 import requests
 import json
