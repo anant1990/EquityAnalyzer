@@ -1,8 +1,0 @@
-streamlit
-datetime
-requests
-pandas
-yfinance
-json
-numpy_financial
-BeautifulSoup
