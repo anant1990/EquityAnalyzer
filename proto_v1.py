@@ -89,19 +89,19 @@ def get_forward_pe_from_website(ticker):
         # Send a GET request to the URL
         response = requests.get(url, headers=headers, timeout=5)
 
-        st.write("Response status code: ", response)
-        st.write("URL is:", url)
+        #st.write("Response status code: ", response)
+        #st.write("URL is:", url)
 
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
             # Parse the HTML content using BeautifulSoup
             soup = BeautifulSoup(response.text, 'html.parser')
-            st.write("Hello")
+            #st.write("Hello")
 
             # Locate the element containing the forward P/E ratio
             forward_pe_element = soup.find('div', {'class': 'D(ib) W(1/2) Bxz(bb) Pstart(12px) Va(t) ie-7_D(i) ie-7_Pos(a) smartphone_D(b) smartphone_W(100%) smartphone_Pstart(0px) smartphone_BdB smartphone_Bdc($seperatorColor)'}).find_all('td', {'class':'Ta(end) Fw(600) Lh(14px)'})[2].text
-            st.write("Forward P/E Element")
-            st.write(forward_pe_element)
+            #st.write("Forward P/E Element")
+            #st.write(forward_pe_element)
 
             # Extract the forward P/E ratio
             forward_pe_ratio = float(forward_pe_element)
