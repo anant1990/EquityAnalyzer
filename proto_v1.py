@@ -99,7 +99,7 @@ def get_forward_pe_from_website(ticker):
             st.write("Hello")
 
             # Locate the element containing the forward P/E ratio
-            forward_pe_element = soup.find('div', {'class': 'Mb(10px) smartphone_Pend(0px) Pend(20px)'}).find_all('td', {'class':'Fw(500) Ta(end) Pstart(10px) Miw(60px)'})[3].text
+            forward_pe_element = soup.find('div', {'class': 'D(ib) W(1/2) Bxz(bb) Pstart(12px) Va(t) ie-7_D(i) ie-7_Pos(a) smartphone_D(b) smartphone_W(100%) smartphone_Pstart(0px) smartphone_BdB smartphone_Bdc($seperatorColor)'}).find_all('td', {'class':'Ta(end) Fw(600) Lh(14px)'})[2].text
             st.write("Forward P/E Element")
             st.write(forward_pe_element)
 
@@ -130,7 +130,7 @@ def get_epsttm_from_website(ticker):
             # Parse the HTML content using BeautifulSoup
             soup = BeautifulSoup(response.text, 'html.parser')
 
-            # Locate the element containing the forward P/E ratio
+            # Locate the element containing the ttm eps
             epsttm_element = soup.find('div', {'class': 'D(ib) W(1/2) Bxz(bb) Pstart(12px) Va(t) ie-7_D(i) ie-7_Pos(a) smartphone_D(b) smartphone_W(100%) smartphone_Pstart(0px) smartphone_BdB smartphone_Bdc($seperatorColor)'}).find_all('td', {'class':'Ta(end) Fw(600) Lh(14px)'})[3].text
             #st.write(epsttm_element)
 
