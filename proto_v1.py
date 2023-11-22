@@ -84,7 +84,7 @@ def eps_valuation(ticker, ttm_eps, growth_rate, growth_decline_rate):
 def get_forward_pe_from_website(ticker):
     try:
         # Replace 'URL' with the actual URL of the website providing forward P/E information
-        url = f'https://finance.yahoo.com/quote/{ticker}/key-statistics'
+        url = f'https://finance.yahoo.com/quote/{ticker}'
 
         # Send a GET request to the URL
         response = requests.get(url, headers=headers, timeout=5)
