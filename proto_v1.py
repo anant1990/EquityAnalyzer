@@ -90,6 +90,7 @@ def get_forward_pe_from_website(ticker):
         response = requests.get(url, headers=headers, timeout=5)
 
         st.write("Response status code: ", response)
+        st.write("URL is:", url)
 
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
