@@ -37,13 +37,13 @@ def calculate_dcf(ticker, growth_rate):
     pv_of_fcfs = 0
     pv_of_lcf = 0
     for year in range(1, 10):
-        pv_of_fcfs += ((free_cash_flow) * ((1 + growth_rate) ** (year - 1))) / (1 + 0.08) ** year
-        pv_of_lcf = (free_cash_flow) * ((1 + growth_rate) ** (year - 1))
+        pv_of_fcfs += ((free_cash_flow) * ((1 + (growth_rate/100)) ** (year - 1))) / (1 + 0.08) ** year
+        pv_of_lcf = (free_cash_flow) * ((1 + (growth_rate/100)) ** (year - 1))
         #st.write(((free_cash_flow) * ((1 + growth_rate) ** (year - 1)))/1000000)
 
     # Calculate the terminal value of the FCFs.
     # terminal_value = free_cash_flow * (1 + growth_rate) ** 9 / (0.1 - growth_rate)
-    terminal_value = (pv_of_lcf)/((growth_rate - 0.02)*((1+0.1) ** 9))
+    terminal_value = (pv_of_lcf)/(((growth_rate/100) - 0.02)*((1+0.1) ** 9))
 
     # Calculate the total DCF. (Enterprise value)
     dcf = pv_of_fcfs + terminal_value
@@ -63,15 +63,14 @@ def calculate_dcf(ticker, growth_rate):
 def eps_valuation(ticker, ttm_eps, growth_rate, growth_decline_rate):
 
     final_eps_val = 0.00
-    final_eps_val = ttm_eps * (1 + growth_rate)
+    final_eps_val = ttm_eps * (1 + (growth_rate/100))
     for year in range(1,5):
-        final_eps_val = final_eps_val * (1 + (growth_rate * ((1 - growth_decline_rate)**(year-1))))
+        final_eps_val = final_eps_val * (1 + ((growth_rate/100) * ((1 - (growth_decline_rate/100))**(year-1))))
         #st.write("EPS in Y", year+1, ":", final_eps_val)
     
     # st.write(yf.Ticker(ticker).info)
     #st.write("Get Forward P/E")
-    st.write("P/E value used to project valuation:", get_forward_pe_from_website(ticker))
-    #st.write(get_epsttm_from_website(ticker))
+    #st.write(get_forward_pe_from_website(ticker))
 
     #Projected Value
     final_eps_val = final_eps_val * (get_forward_pe_from_website(ticker))
@@ -83,27 +82,24 @@ def eps_valuation(ticker, ttm_eps, growth_rate, growth_decline_rate):
 
 def get_forward_pe_from_website(ticker):
     try:
-        # Replace 'URL' with the actual URL of the website providing forward P/E information
+        # Replace 'URL' with the actual URL of the website providing P/E information
         url = f'https://finance.yahoo.com/quote/{ticker}'
 
         # Send a GET request to the URL
         response = requests.get(url, headers=headers, timeout=5)
 
         #st.write("Response status code: ", response)
-        #st.write("URL is:", url)
 
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
             # Parse the HTML content using BeautifulSoup
             soup = BeautifulSoup(response.text, 'html.parser')
-            #st.write("Hello")
 
-            # Locate the element containing the forward P/E ratio
+            # Locate the element containing the P/E ratio
             forward_pe_element = soup.find('div', {'class': 'D(ib) W(1/2) Bxz(bb) Pstart(12px) Va(t) ie-7_D(i) ie-7_Pos(a) smartphone_D(b) smartphone_W(100%) smartphone_Pstart(0px) smartphone_BdB smartphone_Bdc($seperatorColor)'}).find_all('td', {'class':'Ta(end) Fw(600) Lh(14px)'})[2].text
-            #st.write("Forward P/E Element")
             #st.write(forward_pe_element)
 
-            # Extract the forward P/E ratio
+            # Extract the P/E ratio
             forward_pe_ratio = float(forward_pe_element)
 
             #st.write(forward_pe_ratio)
@@ -130,11 +126,11 @@ def get_epsttm_from_website(ticker):
             # Parse the HTML content using BeautifulSoup
             soup = BeautifulSoup(response.text, 'html.parser')
 
-            # Locate the element containing the ttm eps
+            # Locate the element containing the EPS(ttm) value
             epsttm_element = soup.find('div', {'class': 'D(ib) W(1/2) Bxz(bb) Pstart(12px) Va(t) ie-7_D(i) ie-7_Pos(a) smartphone_D(b) smartphone_W(100%) smartphone_Pstart(0px) smartphone_BdB smartphone_Bdc($seperatorColor)'}).find_all('td', {'class':'Ta(end) Fw(600) Lh(14px)'})[3].text
             #st.write(epsttm_element)
 
-            # Extract the forward P/E ratio
+            # Extract the EPS(ttm) value
             epsttm = float(epsttm_element)
 
             #st.write(epsttm)
@@ -186,36 +182,47 @@ def display_dcf(dcf):
   # Display the DCF of the stock to the user.
   st.write(f"The DCF of the stock is: {dcf:.2f}")
 
+def is_valid_ticker(ticker):
+    if ticker is not None and ticker:
+        return True
+    else:
+        return False
+
 # Get the ticker symbol from the user.
 ticker = st.text_input("Enter a ticker symbol: ")
-growth_rate = st.number_input("Enter the growth rate: ")
-growth_decline_rate = st.number_input("Enter the growth decline rate: ")
+growth_rate = st.number_input("Enter the growth rate in % (for 10% enter 10.00): ")
+growth_decline_rate = st.number_input("Enter the growth decline rate in % (for 5% enter 5.00): ")
 
-# Scrape the stock data for the specified ticker.
-stock_df = scrape_stock_data(ticker)
+if is_valid_ticker(ticker) and growth_rate != 0 and growth_decline_rate != 0:
+    # Scrape the stock data for the specified ticker.
+    stock_df = scrape_stock_data(ticker)
 
-# Display the stock data to the user.
-st.write(stock_df)
+    # Display the stock data to the user.
+    st.write(stock_df)
 
-# Calculate DCF for the specified ticker.
-stock_dcf = calculate_dcf(ticker, growth_rate)
+    # Calculate DCF for the specified ticker.
+    stock_dcf = calculate_dcf(ticker, growth_rate)
 
-ttm_eps = get_epsttm_from_website(ticker)
-eps_val = eps_valuation(ticker, ttm_eps, growth_rate, growth_decline_rate)
+    ttm_eps = get_epsttm_from_website(ticker)
+    eps_val = eps_valuation(ticker, ttm_eps, growth_rate, growth_decline_rate)
 
-#st.write("EPS value obtained with inputs is:", eps_val)
-st.divider()
-col1, col2 = st.columns(2)
+    #st.write("EPS value obtained with inputs is:", eps_val)
+    st.divider()
+    col1, col2 = st.columns(2)
 
-with col1:
-    st.subheader("DCF (Intrinsic)")
-    st.title("%.2f" %stock_dcf)
+    with col1:
+        st.subheader("DCF (Intrinsic)")
+        st.title("%.2f" %stock_dcf)
 
-with col2:
-    st.subheader("P/E (Relative)")
-    st.title("%.2f" %eps_val)
+    with col2:
+        st.subheader("P/E (Relative)")
+        st.title("%.2f" %eps_val)
 
-st.divider()
+    st.divider()
+
+else:
+    st.warning("Please enter a ticker symbol, growth rate and decline rate to proceed")
+
 
 # col1.metric("DCF (Intrinsic)", "%.2f" %stock_dcf)
 # col2.metric("P/E (Relative)", "%.2f" %eps_val)
